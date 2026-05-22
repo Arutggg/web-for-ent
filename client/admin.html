@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — ENT Math</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f5f3;
+  --card: #fff;
+  --border: #e8e8e4;
+  --text: #111;
+  --muted: #888;
+  --accent: #111;
+  --green: #16a34a;
+  --green-bg: #dcfce7;
+  --red: #dc2626;
+  --red-bg: #fee2e2;
+  --yellow: #ca8a04;
+  --yellow-bg: #fef9c3;
+  --blue: #2563eb;
+  --blue-bg: #dbeafe;
+}
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+/* LOGIN */
+#login-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+}
+.login-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 40px; width: 360px; text-align: center;
+}
+.login-logo { font-size: 13px; font-weight: 700; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; margin-bottom: 8px; }
+.login-title { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+.login-input {
+  width: 100%; border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; font-size: 15px; font-family: inherit; outline: none;
+  margin-bottom: 12px; transition: border-color .15s;
+}
+.login-input:focus { border-color: #999; }
+.login-btn {
+  width: 100%; background: var(--accent); color: #fff; border: none;
+  border-radius: 10px; padding: 11px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: opacity .15s;
+}
+.login-btn:hover { opacity: .85; }
+.login-err { font-size: 13px; color: var(--red); margin-top: 8px; min-height: 18px; }
+
+/* TOP NAV */
+#admin-app { display: none; }
+.top-nav {
+  background: #111; color: #fff; height: 52px;
+  display: flex; align-items: center; padding: 0 24px; gap: 0;
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-logo { font-size: 13px; font-weight: 700; letter-spacing: .05em; color: rgba(255,255,255,.5); margin-right: 32px; }
+.nav-logo span { color: #fff; }
+.nav-pages { display: flex; gap: 2px; flex: 1; }
+.nav-page-link {
+  color: rgba(255,255,255,.5); text-decoration: none; font-size: 13px; font-weight: 500;
+  padding: 6px 12px; border-radius: 7px; transition: all .15s;
+}
+.nav-page-link:hover { color: #fff; background: rgba(255,255,255,.08); }
+.nav-page-link.active { color: #fff; background: rgba(255,255,255,.12); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.nav-secret { font-size: 11px; color: rgba(255,255,255,.3); font-family: monospace; }
+.nav-logout {
+  font-size: 12px; color: rgba(255,255,255,.4); background: none; border: 1px solid rgba(255,255,255,.15);
+  border-radius: 6px; padding: 4px 10px; cursor: pointer; transition: all .15s;
+}
+.nav-logout:hover { color: #fff; border-color: rgba(255,255,255,.4); }
+
+/* TABS */
+.tabs-bar {
+  background: var(--card); border-bottom: 1px solid var(--border);
+  display: flex; padding: 0 24px; gap: 0;
+}
+.tab-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 14px 18px; font-size: 13px; font-weight: 600; color: var(--muted);
+  cursor: pointer; transition: all .15s; margin-bottom: -1px;
+}
+.tab-btn.active { color: var(--text); border-bottom-color: var(--text); }
+.tab-btn:hover:not(.active) { color: var(--text); }
+
+/* CONTENT */
+.content { padding: 28px 24px; max-width: 1100px; margin: 0 auto; }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* STAT CARDS */
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 28px; }
+.stat-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px 20px 16px;
+}
+.stat-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 8px; }
+.stat-val { font-size: 32px; font-weight: 700; line-height: 1; letter-spacing: -1px; }
+.stat-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+/* SECTION HEADER */
+.section-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.section-title { font-size: 15px; font-weight: 700; }
+.section-note { font-size: 12px; color: var(--muted); }
+
+/* TABLE */
+.table-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: #fafaf8; border-bottom: 1px solid var(--border);
+  padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .05em;
+}
+tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: #fafaf8; }
+tbody tr.expandable { cursor: pointer; }
+td { padding: 12px 14px; font-size: 13px; vertical-align: middle; }
+.td-mono { font-family: monospace; font-size: 12px; color: var(--muted); }
+
+/* BADGE */
+.badge {
+  display: inline-flex; align-items: center; padding: 2px 8px;
+  border-radius: 100px; font-size: 11px; font-weight: 600;
+}
+.badge-green { background: var(--green-bg); color: var(--green); }
+.badge-red   { background: var(--red-bg);   color: var(--red); }
+.badge-yellow{ background: var(--yellow-bg); color: var(--yellow); }
+.badge-blue  { background: var(--blue-bg);  color: var(--blue); }
+.badge-gray  { background: #f0f0ee; color: #555; }
+
+/* SCORE BAR */
+.score-bar-wrap { display: flex; align-items: center; gap: 8px; }
+.score-bar { flex: 1; height: 5px; background: #eee; border-radius: 100px; overflow: hidden; min-width: 60px; }
+.score-bar-fill { height: 100%; border-radius: 100px; }
+.score-pct { font-size: 12px; font-weight: 600; min-width: 32px; }
+
+/* EXPAND ROW */
+.expand-row { display: none; }
+.expand-row.open { display: table-row; }
+.expand-cell { padding: 0 !important; }
+.expand-inner {
+  padding: 16px 20px; background: #fafaf8;
+  border-bottom: 2px solid var(--border);
+}
+.expand-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; }
+.expand-topic {
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 10px 12px;
+}
+.expand-topic-name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.expand-topic-row { display: flex; align-items: center; gap: 6px; margin-top: 6px; }
+.expand-topic-bar { flex: 1; height: 4px; background: #eee; border-radius: 100px; overflow: hidden; }
+.expand-topic-fill { height: 100%; border-radius: 100px; }
+.expand-topic-pct { font-size: 11px; font-weight: 600; min-width: 26px; }
+.early-exit-tag { font-size: 10px; color: var(--muted); margin-top: 2px; }
+
+/* BANK */
+.bank-section-hdr {
+  background: #fafaf8; border-bottom: 1px solid var(--border);
+  padding: 8px 14px; font-size: 11px; font-weight: 700;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .06em;
+}
+
+/* EMPTY STATE */
+.empty-state { padding: 48px; text-align: center; color: var(--muted); }
+.empty-state-icon { font-size: 32px; margin-bottom: 12px; }
+.empty-state-text { font-size: 14px; }
+
+/* LOADING */
+.loading { padding: 48px; text-align: center; color: var(--muted); font-size: 14px; }
+
+/* REFRESH BTN */
+.btn-sm {
+  background: var(--accent); color: #fff; border: none; border-radius: 8px;
+  padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-sm:hover { opacity: .8; }
+.btn-outline {
+  background: none; color: var(--text); border: 1px solid var(--border); border-radius: 8px;
+  padding: 7px 14px; font-size: 12px; font-weight: 600; cursor: pointer;
+  transition: all .15s;
+}
+.btn-outline:hover { background: var(--bg); }
+
+@media (max-width: 800px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .expand-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 500px) {
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+  .content { padding: 16px 12px; }
+  .top-nav { padding: 0 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-card">
+    <div class="login-logo">ENT Math</div>
+    <div class="login-title">Админ-панель</div>
+    <input class="login-input" type="password" id="pwd-input" placeholder="Пароль" autocomplete="current-password">
+    <button class="login-btn" id="login-btn">Войти</button>
+    <div class="login-err" id="login-err"></div>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="admin-app">
+
+  <!-- NAV -->
+  <nav class="top-nav">
+    <div class="nav-logo">ENT<span>Math</span></div>
+    <div class="nav-pages">
+      <a class="nav-page-link active" href="/admin.html">Админ</a>
+      <a class="nav-page-link" href="/" target="_blank">Главная</a>
+      <a class="nav-page-link" href="/diagnostic.html" target="_blank">Диагностика</a>
+      <a class="nav-page-link" href="/auth.html" target="_blank">Авторизация</a>
+    </div>
+    <div class="nav-right">
+      <span class="nav-secret" id="nav-secret"></span>
+      <button class="nav-logout" id="logout-btn">Выйти</button>
+    </div>
+  </nav>
+
+  <!-- TABS -->
+  <div class="tabs-bar">
+    <button class="tab-btn active" data-tab="dashboard">Дашборд</button>
+    <button class="tab-btn" data-tab="sessions">Сессии</button>
+    <button class="tab-btn" data-tab="leads">Emails</button>
+    <button class="tab-btn" data-tab="bank">Банк вопросов</button>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="tab-pane active" id="tab-dashboard">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Всего сессий</div>
+          <div class="stat-val" id="s-total">—</div>
+          <div class="stat-sub">диагностических тестов</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Средний балл</div>
+          <div class="stat-val" id="s-avg">—</div>
+          <div class="stat-sub">% по всем сессиям</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Сегодня</div>
+          <div class="stat-val" id="s-today">—</div>
+          <div class="stat-sub">новых сессий</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Email-адресов</div>
+          <div class="stat-val" id="s-leads">—</div>
+          <div class="stat-sub">собрано через отчёт</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Банк вопросов</div>
+          <div class="stat-val" id="s-bank">—</div>
+          <div class="stat-sub">вопросов всего</div>
+        </div>
+      </div>
+
+      <div class="section-hdr">
+        <div class="section-title">Последние сессии</div>
+        <button class="btn-outline" id="dash-refresh">Обновить</button>
+      </div>
+      <div class="table-wrap" id="dash-table">
+        <div class="loading">Загрузка...</div>
+      </div>
+    </div>
+
+    <!-- SESSIONS -->
+    <div class="tab-pane" id="tab-sessions">
+      <div class="section-hdr">
+        <div class="section-title">Все сессии</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="section-note" id="sessions-count"></span>
+          <button class="btn-outline" id="sessions-refresh">Обновить</button>
+        </div>
+      </div>
+      <div class="table-wrap" id="sessions-table">
+        <div class="loading">Загрузка...</div>
+      </div>
+    </div>
+
+    <!-- LEADS -->
+    <div class="tab-pane" id="tab-leads">
+      <div class="section-hdr">
+        <div class="section-title">Email-адреса</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <span class="section-note" id="leads-count"></span>
+          <button class="btn-outline" id="leads-refresh">Обновить</button>
+        </div>
+      </div>
+      <div class="table-wrap" id="leads-table">
+        <div class="loading">Загрузка...</div>
+      </div>
+    </div>
+
+    <!-- BANK -->
+    <div class="tab-pane" id="tab-bank">
+      <div class="section-hdr">
+        <div class="section-title">Банк вопросов по темам</div>
+        <button class="btn-outline" id="bank-refresh">Обновить</button>
+      </div>
+      <div class="table-wrap" id="bank-table">
+        <div class="loading">Загрузка...</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const LS_KEY = 'admin_secret';
+let SECRET = '';
+
+// ---- AUTH ----
+document.getElementById('pwd-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') document.getElementById('login-btn').click();
+});
+document.getElementById('login-btn').addEventListener('click', async () => {
+  const pwd = document.getElementById('pwd-input').value.trim();
+  if (!pwd) return;
+  const errEl = document.getElementById('login-err');
+  const btn = document.getElementById('login-btn');
+  btn.textContent = 'Проверяем...';
+  btn.disabled = true;
+  try {
+    const resp = await fetch('/api/admin/data', { headers: { 'x-admin-secret': pwd } });
+    if (resp.status === 401) { errEl.textContent = 'Неверный пароль'; return; }
+    if (!resp.ok) { errEl.textContent = 'Ошибка сервера: ' + resp.status; return; }
+    let data;
+    try { data = await resp.json(); }
+    catch { errEl.textContent = 'Сервер вернул не JSON — перезапусти сервер (npm run dev)'; return; }
+    SECRET = pwd;
+    sessionStorage.setItem(LS_KEY, pwd);
+    errEl.textContent = '';
+    showApp(data);
+  } catch (e) {
+    errEl.textContent = 'Не удалось подключиться: ' + e.message;
+  } finally {
+    btn.textContent = 'Войти';
+    btn.disabled = false;
+  }
+});
+
+document.getElementById('logout-btn').addEventListener('click', () => {
+  sessionStorage.removeItem(LS_KEY);
+  location.reload();
+});
+
+// Auto-login from session
+const saved = sessionStorage.getItem(LS_KEY);
+if (saved) {
+  fetch('/api/admin/data', { headers: { 'x-admin-secret': saved } })
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(data => { SECRET = saved; showApp(data); })
+    .catch(() => {});
+}
+
+// ---- APP ----
+function showApp(data) {
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('admin-app').style.display = 'block';
+  document.getElementById('nav-secret').textContent = SECRET;
+  renderAll(data);
+}
+
+async function api(path) {
+  const r = await fetch(path, { headers: { 'x-admin-secret': SECRET } });
+  return r.json();
+}
+
+// ---- TABS ----
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ---- REFRESH BUTTONS ----
+document.getElementById('dash-refresh').addEventListener('click', async () => {
+  const data = await api('/api/admin/data');
+  renderDashboard(data);
+});
+document.getElementById('sessions-refresh').addEventListener('click', async () => {
+  const data = await api('/api/admin/data');
+  renderSessions(data.diagnostic_results);
+});
+document.getElementById('bank-refresh').addEventListener('click', async () => {
+  const data = await api('/api/admin/bank');
+  renderBank(data);
+});
+document.getElementById('leads-refresh').addEventListener('click', async () => {
+  const data = await api('/api/admin/data');
+  renderLeads(data.email_leads || []);
+});
+
+// ---- RENDER ALL ----
+async function renderAll(data) {
+  renderDashboard(data);
+  renderSessions(data.diagnostic_results);
+  renderLeads(data.email_leads || []);
+  const bankData = await api('/api/admin/bank');
+  renderBank(bankData);
+  document.getElementById('s-bank').textContent = bankData.totalQuestions;
+}
+
+// ---- DASHBOARD ----
+function renderDashboard(data) {
+  const sessions = data.diagnostic_results || [];
+  document.getElementById('s-total').textContent = sessions.length;
+
+  if (sessions.length) {
+    const avg = Math.round(sessions.reduce((s, r) => s + (r.totalPct || 0), 0) / sessions.length);
+    document.getElementById('s-avg').textContent = avg + '%';
+  } else {
+    document.getElementById('s-avg').textContent = '—';
+  }
+
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const todayCount = sessions.filter(r => (r.created_at || '').startsWith(todayStr)).length;
+  document.getElementById('s-today').textContent = todayCount;
+
+  const leads = data.email_leads || [];
+  document.getElementById('s-leads').textContent = leads.length;
+
+  const recent = [...sessions].reverse().slice(0, 8);
+  const el = document.getElementById('dash-table');
+  if (!recent.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-text">Сессий пока нет</div></div>';
+    return;
+  }
+  el.innerHTML = renderSessionTable(recent, true);
+  bindExpand(el);
+}
+
+// ---- SESSIONS ----
+function renderSessions(sessions) {
+  document.getElementById('sessions-count').textContent = sessions.length + ' сессий';
+  const el = document.getElementById('sessions-table');
+  if (!sessions.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-text">Сессий пока нет</div></div>';
+    return;
+  }
+  el.innerHTML = renderSessionTable([...sessions].reverse(), false);
+  bindExpand(el);
+}
+
+function scoreColor(pct) {
+  if (pct >= 70) return '#16a34a';
+  if (pct >= 40) return '#ca8a04';
+  return '#dc2626';
+}
+
+function scoreBadgeClass(pct) {
+  if (pct >= 70) return 'badge-green';
+  if (pct >= 40) return 'badge-yellow';
+  return 'badge-red';
+}
+
+function renderSessionTable(sessions, compact) {
+  const rows = sessions.map((r, idx) => {
+    const topics = r.topicData ? Object.values(r.topicData) : [];
+    const weakest = topics.length
+      ? topics.reduce((a, b) => a.pct < b.pct ? a : b)
+      : null;
+    const pred = Math.round((r.totalPct || 0) / 100 * 50);
+    const date = r.created_at ? new Date(r.created_at).toLocaleString('ru', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
+    const examBadge = r.examType === 'ege'
+      ? '<span class="badge badge-blue">ЕГЭ</span>'
+      : '<span class="badge badge-gray">ЕНТ</span>';
+    const pct = r.totalPct || 0;
+    const expandId = 'expand-' + (r.id || idx);
+
+    return `
+      <tr class="expandable" data-expand="${expandId}">
+        <td class="td-mono">${date}</td>
+        <td>${examBadge}</td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%;background:${scoreColor(pct)}"></div></div>
+            <span class="score-pct" style="color:${scoreColor(pct)}">${pct}%</span>
+          </div>
+        </td>
+        <td><span class="badge ${scoreBadgeClass(pct)}">${pred}/50</span></td>
+        <td style="font-size:12px;color:var(--muted)">${weakest ? weakest.name + ' (' + weakest.pct + '%)' : '—'}</td>
+        <td style="font-size:11px;color:var(--muted)">${topics.length} тем</td>
+      </tr>
+      <tr class="expand-row" id="${expandId}">
+        <td class="expand-cell" colspan="6">
+          <div class="expand-inner">
+            ${topics.length ? renderTopicGrid(topics) : '<span style="color:var(--muted);font-size:13px;">Нет данных по темам</span>'}
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  return `<table>
+    <thead><tr>
+      <th>Дата</th><th>Тип</th><th style="min-width:160px">Результат</th><th>Прогноз</th><th>Слабое место</th><th>Охват</th>
+    </tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function renderTopicGrid(topics) {
+  return '<div class="expand-grid">' + topics.map(t => {
+    const c = scoreColor(t.pct);
+    return `<div class="expand-topic">
+      <div class="expand-topic-name">${t.name}</div>
+      <div style="font-size:11px;color:var(--muted)">${t.section}</div>
+      <div class="expand-topic-row">
+        <div class="expand-topic-bar"><div class="expand-topic-fill" style="width:${t.pct}%;background:${c}"></div></div>
+        <span class="expand-topic-pct" style="color:${c}">${t.pct}%</span>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px">${t.correct}/${t.total} верно${t.earlyExit ? ' · ранний выход' : ''}</div>
+    </div>`;
+  }).join('') + '</div>';
+}
+
+function bindExpand(container) {
+  container.querySelectorAll('.expandable').forEach(row => {
+    row.addEventListener('click', () => {
+      const id = row.dataset.expand;
+      const expandRow = document.getElementById(id);
+      if (expandRow) expandRow.classList.toggle('open');
+    });
+  });
+}
+
+// ---- LEADS ----
+function renderLeads(leads) {
+  document.getElementById('leads-count').textContent = leads.length + ' адресов';
+  const el = document.getElementById('leads-table');
+  if (!leads.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-text">Email-адресов пока нет</div></div>';
+    return;
+  }
+  const rows = [...leads].reverse().map(l => {
+    const date = l.created_at ? new Date(l.created_at).toLocaleString('ru', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' }) : '—';
+    return `<tr>
+      <td style="font-weight:500">${l.email}</td>
+      <td class="td-mono">${date}</td>
+      <td class="td-mono" style="font-size:11px;color:var(--muted)">${l.sessionId || '—'}</td>
+    </tr>`;
+  }).join('');
+  el.innerHTML = `<table>
+    <thead><tr><th>Email</th><th>Дата</th><th>Session ID</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+// ---- BANK ----
+function renderBank(data) {
+  const el = document.getElementById('bank-table');
+  const topics = data.topics || [];
+  if (!topics.length) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-text">Нет данных</div></div>';
+    return;
+  }
+
+  const sections = [...new Set(topics.map(t => t.section))];
+  let html = '<table><thead><tr><th>Тема</th><th>Раздел</th><th style="min-width:140px">Вопросов</th><th>Статус</th></tr></thead><tbody>';
+
+  sections.forEach(sec => {
+    html += `<tr><td colspan="4" class="bank-section-hdr">${sec}</td></tr>`;
+    topics.filter(t => t.section === sec).forEach(t => {
+      const pct = Math.min(100, Math.round(t.count / 50 * 100));
+      const status = t.count >= 20
+        ? '<span class="badge badge-green">Хорошо</span>'
+        : t.count >= 7
+        ? '<span class="badge badge-yellow">Нормально</span>'
+        : '<span class="badge badge-red">Мало</span>';
+      html += `<tr>
+        <td style="font-weight:500">${t.name}</td>
+        <td style="color:var(--muted)">${t.section}</td>
+        <td>
+          <div class="score-bar-wrap">
+            <div class="score-bar"><div class="score-bar-fill" style="width:${pct}%;background:${t.count >= 20 ? '#16a34a' : t.count >= 7 ? '#ca8a04' : '#dc2626'}"></div></div>
+            <span class="score-pct" style="font-weight:600">${t.count}</span>
+          </div>
+        </td>
+        <td>${status}</td>
+      </tr>`;
+    });
+  });
+
+  html += '</tbody></table>';
+  el.innerHTML = html;
+}
+</script>
+</body>
+</html>

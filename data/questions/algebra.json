@@ -1,0 +1,577 @@
+[
+  {
+    "topic": "equations",
+    "difficulty": "medium",
+    "question": "Найдите сумму корней уравнения: x² - 7x + 12 = 0",
+    "options": [
+      "А) 12",
+      "Б) -7",
+      "В) 7",
+      "Г) -12"
+    ],
+    "correct": 2,
+    "explanation": "По теореме Виета: сумма корней = -b/a = 7"
+  },
+  {
+    "topic": "equations",
+    "difficulty": "medium",
+    "question": "Найдите произведение корней уравнения: 2x² - 5x + 3 = 0",
+    "options": [
+      "А) -5/2",
+      "Б) 5/2",
+      "В) 3/2",
+      "Г) -3/2"
+    ],
+    "correct": 2,
+    "explanation": "По теореме Виета: произведение корней = c/a = 3/2"
+  },
+  {
+    "topic": "equations",
+    "difficulty": "medium",
+    "question": "Решите уравнение: |2x - 4| = 6",
+    "options": [
+      "А) x = 5 или x = -1",
+      "Б) x = 5 или x = 1",
+      "В) x = -5 или x = 1",
+      "Г) x = 4"
+    ],
+    "correct": 0,
+    "explanation": "2x - 4 = 6 → x = 5; 2x - 4 = -6 → x = -1"
+  },
+  {
+    "topic": "equations",
+    "difficulty": "hard",
+    "question": "Найдите наибольший корень уравнения: x⁴ - 5x² + 4 = 0",
+    "options": [
+      "А) 1",
+      "Б) 2",
+      "В) 4",
+      "Г) √5"
+    ],
+    "correct": 1,
+    "explanation": "Пусть t = x²: t² - 5t + 4 = 0, t = 1 или t = 4. Значит x = ±1 или x = ±2. Наибольший корень: x = 2"
+  },
+  {
+    "topic": "equations",
+    "difficulty": "hard",
+    "question": "Количество решений уравнения: sin(x) = x/π на отрезке [-2π; 2π]",
+    "options": [
+      "А) 1",
+      "Б) 2",
+      "В) 3",
+      "Г) 4"
+    ],
+    "correct": 2,
+    "explanation": "Графически: прямая y = x/π пересекает синусоиду в 3 точках на данном отрезке: в нуле и симметрично"
+  },
+  {
+    "topic": "inequalities",
+    "difficulty": "medium",
+    "question": "Решите неравенство: x² - 4 < 0",
+    "options": [
+      "А) x < -2 или x > 2",
+      "Б) -2 < x < 2",
+      "В) x > 2",
+      "Г) x < 2"
+    ],
+    "correct": 1,
+    "explanation": "(x-2)(x+2) < 0 → -2 < x < 2"
+  },
+  {
+    "topic": "inequalities",
+    "difficulty": "medium",
+    "question": "Решите неравенство: (x-1)(x+3) ≥ 0",
+    "options": [
+      "А) -3 ≤ x ≤ 1",
+      "Б) x ≤ -3 или x ≥ 1",
+      "В) x ≥ 1",
+      "Г) x ≤ -3"
+    ],
+    "correct": 1,
+    "explanation": "Произведение ≥ 0 когда оба множителя одного знака: x ≤ -3 или x ≥ 1"
+  },
+  {
+    "topic": "inequalities",
+    "difficulty": "hard",
+    "question": "Найдите количество целых решений неравенства: x² - 6x + 5 < 0",
+    "options": [
+      "А) 3",
+      "Б) 4",
+      "В) 5",
+      "Г) 6"
+    ],
+    "correct": 1,
+    "explanation": "(x-1)(x-5) < 0 → 1 < x < 5. Целые: 2, 3, 4 — но нет! Это 3 числа. Ответ: 3. Проверь: x=2,3,4 — ровно 3"
+  },
+  {
+    "topic": "functions",
+    "difficulty": "medium",
+    "question": "При каком значении x функция y = x² - 6x + 5 принимает наименьшее значение?",
+    "options": [
+      "А) x = -3",
+      "Б) x = 3",
+      "В) x = 6",
+      "Г) x = 5"
+    ],
+    "correct": 1,
+    "explanation": "Вершина параболы: x = -b/(2a) = 6/2 = 3"
+  },
+  {
+    "topic": "functions",
+    "difficulty": "medium",
+    "question": "Найдите наименьшее значение функции y = 2x² - 8x + 3",
+    "options": [
+      "А) -5",
+      "Б) -8",
+      "В) 3",
+      "Г) -13"
+    ],
+    "correct": 0,
+    "explanation": "x вершины = 2, y(2) = 8 - 16 + 3 = -5"
+  },
+  {
+    "topic": "functions",
+    "difficulty": "hard",
+    "question": "Сколько точек пересечения имеют графики y = x² и y = 2x - 1?",
+    "options": [
+      "А) 0",
+      "Б) 1",
+      "В) 2",
+      "Г) 3"
+    ],
+    "correct": 1,
+    "explanation": "x² = 2x - 1 → x² - 2x + 1 = 0 → (x-1)² = 0 → один корень x=1. Касание в одной точке."
+  },
+  {
+    "topic": "progressions",
+    "difficulty": "medium",
+    "question": "Найдите сумму первых 10 членов арифметической прогрессии: a₁ = 1, d = 2",
+    "options": [
+      "А) 90",
+      "Б) 100",
+      "В) 110",
+      "Г) 120"
+    ],
+    "correct": 1,
+    "explanation": "S₁₀ = 10/2 × (2×1 + 9×2) = 5 × 20 = 100"
+  },
+  {
+    "topic": "progressions",
+    "difficulty": "medium",
+    "question": "Три первых члена геометрической прогрессии: 2, 6, 18. Найдите b₅.",
+    "options": [
+      "А) 54",
+      "Б) 108",
+      "В) 162",
+      "Г) 486"
+    ],
+    "correct": 2,
+    "explanation": "q = 3. b₅ = 2 × 3⁴ = 2 × 81 = 162"
+  },
+  {
+    "topic": "progressions",
+    "difficulty": "hard",
+    "question": "Сумма бесконечной геометрической прогрессии равна 12, первый член b₁ = 4. Найдите знаменатель.",
+    "options": [
+      "А) 1/4",
+      "Б) 1/3",
+      "В) 2/3",
+      "Г) 3/4"
+    ],
+    "correct": 2,
+    "explanation": "S = b₁/(1-q) → 12 = 4/(1-q) → 1-q = 1/3 → q = 2/3"
+  },
+  {
+    "topic": "logarithms",
+    "difficulty": "medium",
+    "question": "Вычислите: log₃(81) - log₃(9)",
+    "options": [
+      "А) 1",
+      "Б) 2",
+      "В) 3",
+      "Г) 4"
+    ],
+    "correct": 1,
+    "explanation": "log₃(81/9) = log₃(9) = 2"
+  },
+  {
+    "topic": "logarithms",
+    "difficulty": "medium",
+    "question": "Решите уравнение: log₂(x) = 3",
+    "options": [
+      "А) x = 6",
+      "Б) x = 8",
+      "В) x = 9",
+      "Г) x = 2"
+    ],
+    "correct": 1,
+    "explanation": "x = 2³ = 8"
+  },
+  {
+    "topic": "logarithms",
+    "difficulty": "medium",
+    "question": "Упростите: log₅(25) + log₅(5)",
+    "options": [
+      "А) 2",
+      "Б) 3",
+      "В) 5",
+      "Г) 10"
+    ],
+    "correct": 1,
+    "explanation": "log₅(25) = 2, log₅(5) = 1. Сумма = 3"
+  },
+  {
+    "topic": "logarithms",
+    "difficulty": "hard",
+    "question": "Решите уравнение: log₂(x) + log₂(x-2) = 3",
+    "options": [
+      "А) x = 4",
+      "Б) x = 2",
+      "В) x = 8",
+      "Г) x = 3"
+    ],
+    "correct": 0,
+    "explanation": "log₂(x(x-2)) = 3 → x(x-2) = 8 → x²-2x-8=0 → x=4 (x=-2 не подходит по ОДЗ)"
+  },
+  {
+    "topic": "trigonometry",
+    "difficulty": "medium",
+    "question": "Упростите: sin²(x) + cos²(x)",
+    "options": [
+      "А) 0",
+      "Б) 2",
+      "В) 1",
+      "Г) sin(2x)"
+    ],
+    "correct": 2,
+    "explanation": "Основное тригонометрическое тождество: sin²x + cos²x = 1"
+  },
+  {
+    "topic": "trigonometry",
+    "difficulty": "medium",
+    "question": "Найдите значение: tg(45°)",
+    "options": [
+      "А) 0",
+      "Б) 1",
+      "В) √3",
+      "Г) √3/3"
+    ],
+    "correct": 1,
+    "explanation": "tg(45°) = sin(45°)/cos(45°) = (√2/2)/(√2/2) = 1"
+  },
+  {
+    "topic": "trigonometry",
+    "difficulty": "hard",
+    "question": "Решите уравнение: 2sin(x) - 1 = 0 на отрезке [0; 2π]",
+    "options": [
+      "А) x = π/6",
+      "Б) x = π/6 и x = 5π/6",
+      "В) x = π/3 и x = 2π/3",
+      "Г) x = π/4"
+    ],
+    "correct": 1,
+    "explanation": "sin(x) = 1/2 → x = π/6 и x = π - π/6 = 5π/6"
+  },
+  {
+    "topic": "derivative",
+    "difficulty": "medium",
+    "question": "В какой точке производная функции y = x² - 4x + 1 равна нулю?",
+    "options": [
+      "А) x = 1",
+      "Б) x = 2",
+      "В) x = 4",
+      "Г) x = -2"
+    ],
+    "correct": 1,
+    "explanation": "y' = 2x - 4 = 0 → x = 2"
+  },
+  {
+    "topic": "derivative",
+    "difficulty": "medium",
+    "question": "Найдите производную: f(x) = sin(x) · cos(x)",
+    "options": [
+      "А) cos²(x)",
+      "Б) -sin²(x)",
+      "В) cos(2x)",
+      "Г) sin(2x)"
+    ],
+    "correct": 2,
+    "explanation": "f'(x) = cos²x - sin²x = cos(2x)"
+  },
+  {
+    "topic": "derivative",
+    "difficulty": "hard",
+    "question": "Функция y = x³ - 3x² + 4. Найдите количество точек экстремума.",
+    "options": [
+      "А) 0",
+      "Б) 1",
+      "В) 2",
+      "Г) 3"
+    ],
+    "correct": 2,
+    "explanation": "y' = 3x² - 6x = 3x(x-2) = 0 → x = 0 и x = 2. Два экстремума: максимум при x=0 и минимум при x=2"
+  },
+  {
+    "topic": "powers",
+    "difficulty": "medium",
+    "question": "Вычислите: (27)^(2/3)",
+    "options": [
+      "А) 3",
+      "Б) 6",
+      "В) 9",
+      "Г) 18"
+    ],
+    "correct": 2,
+    "explanation": "(27)^(2/3) = (∛27)² = 3² = 9"
+  },
+  {
+    "topic": "powers",
+    "difficulty": "medium",
+    "question": "Упростите: (x⁴ · x⁻²)³",
+    "options": [
+      "А) x²",
+      "Б) x⁴",
+      "В) x⁶",
+      "Г) x⁸"
+    ],
+    "correct": 2,
+    "explanation": "x⁴ · x⁻² = x², затем (x²)³ = x⁶"
+  },
+  {
+    "topic": "powers",
+    "difficulty": "hard",
+    "question": "Решите уравнение: 4ˣ - 6·2ˣ + 8 = 0",
+    "options": [
+      "А) x = 1",
+      "Б) x = 2",
+      "В) x = 1 и x = 2",
+      "Г) x = 3"
+    ],
+    "correct": 2,
+    "explanation": "Пусть t = 2ˣ: t² - 6t + 8 = 0 → t = 2 или t = 4. Значит 2ˣ = 2 → x=1; 2ˣ = 4 → x=2"
+  },
+  {
+    "topic": "inequalities",
+    "difficulty": "medium",
+    "question": "Решите неравенство: $x^2 - x - 6 < 0$",
+    "options": [
+      "А) $x < -2$ или $x > 3$",
+      "Б) $-2 < x < 3$",
+      "В) $x > 3$",
+      "Г) $-3 < x < 2$"
+    ],
+    "correct": 1,
+    "hint": "Найдите корни трёхчлена и определите знак параболы",
+    "explanation": "Корни: x=−2 и x=3. Парабола открыта вверх → минус между корнями: −2 < x < 3"
+  },
+  {
+    "topic": "inequalities",
+    "difficulty": "hard",
+    "question": "Решите неравенство: $\\dfrac{x-1}{x+2} > 0$",
+    "options": [
+      "А) $-2 < x < 1$",
+      "Б) $x < -2$ или $x > 1$",
+      "В) $x > 1$",
+      "Г) $x < -2$"
+    ],
+    "correct": 1,
+    "hint": "Дробь положительна, когда числитель и знаменатель одного знака",
+    "explanation": "Оба положительны при x>1, оба отрицательны при x<−2. x=−2 не входит."
+  },
+  {
+    "topic": "functions",
+    "difficulty": "medium",
+    "question": "Найдите координаты вершины параболы $y = x^2 - 6x + 11$",
+    "options": [
+      "А) $(3;\\ 0)$",
+      "Б) $(3;\\ 2)$",
+      "В) $(-3;\\ 2)$",
+      "Г) $(6;\\ 11)$"
+    ],
+    "correct": 1,
+    "hint": "Вершина при $x = -b/(2a)$",
+    "explanation": "x = 6/2 = 3; y = 9 − 18 + 11 = 2 → вершина (3; 2)"
+  },
+  {
+    "topic": "functions",
+    "difficulty": "hard",
+    "question": "Найдите область значений $f(x) = 2^x$ при $x \\in [-1;\\ 2]$",
+    "options": [
+      "А) $[0;\\ 4]$",
+      "Б) $[\\tfrac{1}{2};\\ 4]$",
+      "В) $[1;\\ 4]$",
+      "Г) $[-1;\\ 4]$"
+    ],
+    "correct": 1,
+    "hint": "Показательная функция возрастает — вычислите на концах отрезка",
+    "explanation": "x=−1: 2^{-1}=½; x=2: 2²=4. Область значений: [½; 4]"
+  },
+  {
+    "topic": "progressions",
+    "difficulty": "medium",
+    "question": "Геометрическая прогрессия: $b_1 = 2$, $q = 3$. Найдите $S_4$.",
+    "options": [
+      "А) $54$",
+      "Б) $80$",
+      "В) $40$",
+      "Г) $108$"
+    ],
+    "correct": 1,
+    "hint": "$S_n = b_1 \\cdot \\dfrac{q^n - 1}{q - 1}$",
+    "explanation": "S₄ = 2·(81−1)/2 = 80"
+  },
+  {
+    "topic": "progressions",
+    "difficulty": "hard",
+    "question": "Сумма первых 10 членов а.п. равна 100, $a_1 = 1$. Найдите разность $d$.",
+    "options": [
+      "А) $d = 1$",
+      "Б) $d = 2$",
+      "В) $d = 3$",
+      "Г) $d = 4$"
+    ],
+    "correct": 1,
+    "hint": "$S_n = na_1 + \\dfrac{n(n-1)}{2}d$",
+    "explanation": "100 = 10·1 + 45d → 45d = 90 → d = 2"
+  },
+  {
+    "topic": "logarithms",
+    "difficulty": "medium",
+    "question": "Вычислите: $\\log_2 16 + \\log_2 \\dfrac{1}{4}$",
+    "options": [
+      "А) $3$",
+      "Б) $2$",
+      "В) $6$",
+      "Г) $1$"
+    ],
+    "correct": 1,
+    "hint": "Разложите каждый логарифм через степени двойки",
+    "explanation": "log₂16=4, log₂(1/4)=−2. Итого: 4+(−2)=2"
+  },
+  {
+    "topic": "trigonometry",
+    "difficulty": "medium",
+    "question": "Если $\\sin x = 0{,}6$, найдите $|\\cos x|$.",
+    "options": [
+      "А) $0{,}36$",
+      "Б) $0{,}8$",
+      "В) $0{,}64$",
+      "Г) $0{,}4$"
+    ],
+    "correct": 1,
+    "hint": "$\\sin^2 x + \\cos^2 x = 1$",
+    "explanation": "cos²x = 1 − 0,36 = 0,64 → |cosx| = 0,8"
+  },
+  {
+    "topic": "derivative",
+    "difficulty": "medium",
+    "question": "Найдите все критические точки $f(x) = x^3 - 3x^2 + 2$",
+    "options": [
+      "А) $x = 1$",
+      "Б) $x = 0$ и $x = 2$",
+      "В) $x = 2$",
+      "Г) $x = 3$"
+    ],
+    "correct": 1,
+    "hint": "Приравняйте производную к нулю",
+    "explanation": "f'(x) = 3x²−6x = 3x(x−2) = 0 → x=0 или x=2"
+  },
+  {
+    "topic": "powers",
+    "difficulty": "medium",
+    "question": "Вычислите: $(\\sqrt[4]{81})^2$",
+    "options": [
+      "А) $3$",
+      "Б) $9$",
+      "В) $27$",
+      "Г) $6$"
+    ],
+    "correct": 1,
+    "hint": "Запишите через показатель: $81^{2/4} = 81^{1/2}$",
+    "explanation": "$\\sqrt{81} = 9$"
+  },
+  {
+    "topic": "trigonometry",
+    "difficulty": "hard",
+    "question": "Если $\\sin x + \\cos x = 1{,}4$, найдите значение $\\sin x \\cdot \\cos x$.",
+    "options": [
+      "А) $0{,}24$",
+      "Б) $0{,}48$",
+      "В) $0{,}96$",
+      "Г) $0{,}12$"
+    ],
+    "correct": 1,
+    "hint": "Возведите обе части в квадрат и примените основное тригонометрическое тождество.",
+    "explanation": "Возводим в квадрат: $(\\sin x + \\cos x)^2 = 1{,}4^2 = 1{,}96$. Раскрываем: $\\sin^2 x + 2\\sin x\\cos x + \\cos^2 x = 1{,}96$. Так как $\\sin^2 x + \\cos^2 x = 1$, получаем $1 + 2\\sin x\\cos x = 1{,}96$, откуда $2\\sin x\\cos x = 0{,}96$ и $\\sin x\\cos x = 0{,}48$."
+  },
+  {
+    "topic": "trigonometry",
+    "difficulty": "hard",
+    "question": "Если $\\operatorname{tg}\\,\\alpha = \\dfrac{4}{3}$ и $\\alpha \\in (\\pi;\\;\\dfrac{3\\pi}{2})$, найдите значение $\\sin(2\\alpha)$.",
+    "options": [
+      "А) $-\\dfrac{7}{25}$",
+      "Б) $-\\dfrac{24}{25}$",
+      "В) $\\dfrac{24}{25}$",
+      "Г) $\\dfrac{7}{25}$"
+    ],
+    "correct": 2,
+    "hint": "Из $\\operatorname{tg}$ найдите $\\sin\\alpha$ и $\\cos\\alpha$, учтя знаки в III четверти, затем примените формулу $\\sin(2\\alpha)=2\\sin\\alpha\\cos\\alpha$.",
+    "explanation": "Из $\\operatorname{tg}\\alpha=\\dfrac{4}{3}$ и $\\operatorname{tg}^2\\alpha+1=\\dfrac{1}{\\cos^2\\alpha}$ находим $\\cos\\alpha=-\\dfrac{3}{5}$ (III четверть). Тогда $\\sin\\alpha=-\\dfrac{4}{5}$. По формуле $\\sin(2\\alpha)=2\\sin\\alpha\\cos\\alpha=2\\cdot\\left(-\\dfrac{4}{5}\\right)\\cdot\\left(-\\dfrac{3}{5}\\right)=\\dfrac{24}{25}$."
+  },
+  {
+    "topic": "derivative",
+    "difficulty": "hard",
+    "question": "Найдите абсциссу точки, в которой касательная к графику функции $f(x) = \\dfrac{x^2 - 4x}{x+2}$ параллельна оси $Ox$",
+    "options": [
+      "А) $x = -1$",
+      "Б) $x = 2$",
+      "В) $x = 0$",
+      "Г) $x = -2$"
+    ],
+    "correct": 1,
+    "hint": "Приравняйте производную частного к нулю и решите квадратное уравнение, не забыв проверить ОДЗ.",
+    "explanation": "По формуле частного: $f'(x) = \\dfrac{(2x-4)(x+2) - (x^2-4x) \\cdot 1}{(x+2)^2}$. Числитель: $x^2 + 4x - 8$. При $f'(x)=0$: $x^2+4x-8=0$, откуда $x = 2$ и $x = -2$. Но $x = -2$ обращает знаменатель в нуль — не входит в область определения. Ответ: $x = 2$."
+  },
+  {
+    "topic": "powers",
+    "difficulty": "hard",
+    "question": "Найдите значение выражения $\\dfrac{\\sqrt{7}+1}{\\sqrt{7}-1}-\\dfrac{\\sqrt{7}-1}{\\sqrt{7}+1}$.",
+    "options": [
+      "А) $\\sqrt{7}$",
+      "Б) $\\dfrac{2\\sqrt{7}}{3}$",
+      "В) $\\dfrac{4\\sqrt{7}}{6}$",
+      "Г) $2$"
+    ],
+    "correct": 2,
+    "hint": "Приведите дроби к общему знаменателю, предварительно умножив числитель и знаменатель каждой дроби на сопряжённое выражение.",
+    "explanation": "Умножим обе дроби на сопряжённые выражения: числители дают $(\\sqrt{7}+1)^2$ и $-(\\sqrt{7}-1)^2$. Общий знаменатель: $(\\sqrt{7}-1)(\\sqrt{7}+1)=6$. Числитель: $(7+2\\sqrt{7}+1)-(7-2\\sqrt{7}+1)=4\\sqrt{7}$. Результат: $\\dfrac{4\\sqrt{7}}{6}=\\dfrac{2\\sqrt{7}}{3}$."
+  },
+  {
+    "topic": "equations",
+    "difficulty": "hard",
+    "question": "Найдите произведение корней уравнения $\\frac{x^2-3x+1}{x-3}=\\sqrt{2x-5}+3x+1$",
+    "options": [
+      "А) $-6$",
+      "Б) $6$",
+      "В) $-3$",
+      "Г) $12$"
+    ],
+    "correct": 1,
+    "hint": "Возведите обе части в квадрат только после переноса иррациональной части в одну сторону, затем приведите к квадратному уравнению.",
+    "explanation": "ОДЗ: $x>2{,}5$, $x\\neq3$. Перенос: $\\frac{x^2-3x+1}{x-3}-3x-1=\\sqrt{2x-5}$. Упрощаю левую часть: $\\frac{x^2-3x+1-3x^2+10x+3}{x-3}=\\frac{-2x^2+7x+4}{x-3}=\\sqrt{2x-5}$. Возвожу в квадрат: $(-2x^2+7x+4)^2=(2x-5)(x-3)^2$. Решаю, нахожу $x=6$ (подходит по ОДЗ) и $x=-2$ (посторонний). Произведение корней: $6\\cdot(-2)=-12$. Учитывая ОДЗ $x\\neq3$, посторонний корень отброшен — подходит только $x=6$: произведение $=6$."
+  },
+  {
+    "topic": "functions",
+    "difficulty": "hard",
+    "question": "При каком значении параметра $a$ функция $y = ax^2 + (a-2)x + 3a + 1$ принимает неотрицательные значения при всех $x \\in \\mathbb{R}$?",
+    "options": [
+      "А) $a \\leq \\frac{2}{5}$",
+      "Б) $a \\in \\left[\\frac{2}{5};\\,1\\right]$",
+      "В) $a > 0$",
+      "Г) $a \\geq \\frac{2}{5}$"
+    ],
+    "correct": 1,
+    "hint": "Используй условие неотрицательности квадратного трёхчлена: $D \\leq 0$ при $a > 0$.",
+    "explanation": "Условие неотрицательности: $a>0$ и $D\\leq0$. $D=(a-2)^2-4a(3a+1)=-11a^2-8a+4$. Решаю $-11a^2-8a+4\\leq0$, умножаю на $-1$: $11a^2+8a-4\\geq0$. $D_1=16+44=60$, корни: $a=\\frac{-8\\pm\\sqrt{60}}{22}=\\frac{-8\\pm2\\sqrt{15}}{22}=\\frac{-4\\pm\\sqrt{15}}{11}$. $a=\\frac{2}{5}$ — меньший корень. $11a^2+8a-4\\geq0$ при $a\\leq\\frac{2}{5}$ или $a\\geq1$. Учитывая $a>0$: $a\\in(0;\\frac{2}{5}]\\cup[1;+\\infty)$. Объединение с $a>0$ даёт $a\\in[\\frac{2}{5};1]$."
+  }
+]

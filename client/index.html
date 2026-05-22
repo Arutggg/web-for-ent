@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ENT Math — ЕНТ Тренажёр по математике с AI</title>
+<meta name="description" content="Тренажёр ЕНТ по математике 2026. AI генерирует уникальные вопросы, в конце — персональный AI-отчёт: слабые места, прогноз баллов, план на 3 недели.">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/components.css">
+<link rel="stylesheet" href="/css/landing.css">
+<style>
+/* AI badge strip */
+.ai-strip {
+  background: var(--text); padding: 10px 40px;
+  display: flex; align-items: center; justify-content: center; gap: 32px;
+  flex-wrap: wrap;
+}
+.ai-strip-item {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,.55);
+  letter-spacing: .02em;
+}
+.ai-strip-dot { width: 5px; height: 5px; border-radius: 50%; background: #4ade80; flex-shrink: 0; animation: pulse 2s infinite; }
+
+/* Social proof */
+.social-proof {
+  display: flex; align-items: center; gap: 10px;
+  justify-content: center; margin-top: 20px;
+  animation: fadeUp .6s ease .34s both;
+}
+.proof-avatars { display: flex; }
+.proof-avatars span {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid #fff; background: var(--surface2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; margin-left: -8px;
+}
+.proof-avatars span:first-child { margin-left: 0; }
+.proof-text { font-size: 12px; color: var(--muted); }
+.proof-text strong { color: var(--text); font-weight: 700; }
+
+/* AI report teaser */
+.report-teaser {
+  background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 100%);
+  margin: 0 40px; border-radius: 24px;
+  padding: 56px 48px; display: grid;
+  grid-template-columns: 1fr 1fr; gap: 48px; align-items: center;
+  margin-bottom: 80px;
+}
+.report-teaser-label {
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,.35);
+  letter-spacing: .18em; text-transform: uppercase; margin-bottom: 14px;
+}
+.report-teaser-title {
+  font-family: var(--display); font-size: 32px; font-weight: 800;
+  color: #fff; letter-spacing: -1px; line-height: 1.15; margin-bottom: 16px;
+}
+.report-teaser-desc {
+  font-size: 14px; color: rgba(255,255,255,.45); line-height: 1.75; margin-bottom: 24px;
+}
+.report-teaser-items { display: flex; flex-direction: column; gap: 10px; }
+.rti {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: rgba(255,255,255,.65); font-weight: 500;
+}
+.rti-icon {
+  width: 28px; height: 28px; border-radius: 8px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0;
+}
+/* Report preview mockup */
+.report-mockup {
+  background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 14px;
+}
+.mockup-header {
+  display: flex; align-items: center; gap: 10px;
+  padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.mockup-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.1); display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+}
+.mockup-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.8); }
+.mockup-sub  { font-size: 11px; color: rgba(255,255,255,.3); }
+.mockup-score {
+  text-align: center; padding: 16px;
+  background: rgba(255,255,255,.04); border-radius: 14px;
+}
+.mockup-score-num { font-family: var(--display); font-size: 40px; font-weight: 800; color: #4ade80; letter-spacing: -2px; }
+.mockup-score-label { font-size: 11px; color: rgba(255,255,255,.3); margin-top: 2px; }
+.mockup-bars { display: flex; flex-direction: column; gap: 8px; }
+.mockup-bar-row { display: flex; align-items: center; gap: 8px; }
+.mockup-bar-name { font-size: 11px; color: rgba(255,255,255,.35); width: 80px; flex-shrink: 0; }
+.mockup-bar-wrap { flex: 1; height: 5px; background: rgba(255,255,255,.08); border-radius: 100px; overflow: hidden; }
+.mockup-bar-fill { height: 100%; border-radius: 100px; }
+.mockup-bar-pct  { font-size: 10px; color: rgba(255,255,255,.3); width: 28px; text-align: right; }
+.mockup-plan-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; color: rgba(255,255,255,.4);
+}
+.mockup-week {
+  width: 22px; height: 22px; border-radius: 6px; background: rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,.5); flex-shrink: 0;
+}
+
+/* ai-powered feature row */
+.ai-pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--text); color: #fff; border-radius: 100px;
+  padding: 3px 10px; font-size: 10px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase; vertical-align: middle; margin-left: 6px;
+}
+
+@media (max-width: 860px) {
+  .report-teaser { grid-template-columns: 1fr; margin: 0 20px; padding: 36px 24px; }
+  .report-mockup { display: none; }
+  .ai-strip { gap: 16px; padding: 10px 20px; }
+}
+@media (max-width: 700px) {
+  .report-teaser { margin: 0 16px 48px; }
+}
+</style>
+</head>
+<body>
+
+<!-- AI STRIP -->
+<div class="ai-strip">
+  <div class="ai-strip-item"><span class="ai-strip-dot"></span>Вопросы генерируются AI в реальном времени</div>
+  <div class="ai-strip-item"><span class="ai-strip-dot"></span>AI-отчёт с прогнозом баллов ЕНТ</div>
+  <div class="ai-strip-item"><span class="ai-strip-dot"></span>ЕНТ 2026 · Казахстан · Математика</div>
+</div>
+
+<nav class="nav">
+  <a class="nav-logo" href="/">ENT<span>Math</span></a>
+  <div class="nav-actions">
+    <button class="btn btn-dark btn-sm btn-pill" id="nav-start-btn">Начать тренажёр</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-formulas" aria-hidden="true">
+    <span class="formula f1">log₂(x)</span>
+    <span class="formula f2">∫f(x)dx</span>
+    <span class="formula f3">sin²+cos²=1</span>
+    <span class="formula f4">f'(x)</span>
+    <span class="formula f5">ax²+bx+c=0</span>
+    <span class="formula f6">Σn</span>
+    <span class="formula f7">√(a²+b²)</span>
+    <span class="formula f8">P(A∩B)</span>
+    <span class="formula f9">lim→∞</span>
+    <span class="formula f10">Cₙᵏ</span>
+  </div>
+
+  <div class="hero-content">
+    <div class="badge hero-badge">
+      <span class="badge-dot"></span>
+      AI-тренажёр · ЕНТ Математика · 2026
+    </div>
+    <h1 class="hero-title">
+      ЕНТ<br>
+      <span class="underline">Тренажёр</span>
+    </h1>
+    <p class="hero-quote">"AI генерирует вопросы. AI анализирует тебя. Ты просто растёшь."</p>
+    <p class="hero-sub">
+      Уникальные задачи уровня ЕНТ от искусственного интеллекта — каждый раз новые. В конце получи персональный AI-отчёт: слабые темы, прогноз баллов и план на 3 недели.
+    </p>
+    <div class="hero-cta">
+      <button class="btn btn-dark btn-xl" id="hero-start-btn">
+        Пройти тренажёр бесплатно <span class="arrow">→</span>
+      </button>
+      <p class="hero-note">Без регистрации · 17 тем · AI-отчёт в конце</p>
+    </div>
+    <div class="social-proof">
+      <div class="proof-avatars">
+        <span>А</span><span>М</span><span>Д</span><span>К</span>
+      </div>
+      <div class="proof-text">Вопросы составлены <strong>AI</strong> по реальной программе ЕНТ</div>
+    </div>
+  </div>
+</section>
+
+<!-- STRIP -->
+<div class="strip">
+  <div class="strip-item">
+    <div class="strip-num" id="c-topics">17</div>
+    <div class="strip-label">тем программы ЕНТ</div>
+  </div>
+  <div class="strip-item">
+    <div class="strip-num">∞</div>
+    <div class="strip-label">уникальных вопросов от AI</div>
+  </div>
+  <div class="strip-item">
+    <div class="strip-num">AI</div>
+    <div class="strip-label">персональный отчёт в конце</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features">
+  <h2 class="features-title">Почему это работает</h2>
+  <div class="feat-grid">
+    <div class="feat-card">
+      <div class="feat-num">01</div>
+      <div class="feat-icon-wrap">✦</div>
+      <div class="feat-title">AI генерирует вопросы</div>
+      <div class="feat-desc">Каждый вопрос создаётся искусственным интеллектом — реальный уровень ЕНТ, конкретные числа, типичные ловушки. Не из учебника — из жизни.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">02</div>
+      <div class="feat-icon-wrap">◈</div>
+      <div class="feat-title">Адаптивная сложность</div>
+      <div class="feat-desc">Слабые темы получают больше вопросов. Сильные — пропускаются быстрее. Алгоритм подстраивается под тебя прямо во время теста.</div>
+    </div>
+    <div class="feat-card">
+      <div class="feat-num">03</div>
+      <div class="feat-icon-wrap">◎</div>
+      <div class="feat-title">AI-отчёт в конце</div>
+      <div class="feat-desc">После теста — персональный анализ от AI: сильные темы, слабые места с приоритетом, прогноз баллов ЕНТ и план подготовки на 3 недели.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AI REPORT TEASER -->
+<section style="padding: 0 0 80px;">
+  <div class="report-teaser">
+    <div>
+      <div class="report-teaser-label">После теста</div>
+      <div class="report-teaser-title">Персональный<br>AI-отчёт</div>
+      <div class="report-teaser-desc">
+        После прохождения всех 17 тем искусственный интеллект анализирует твои результаты и составляет детальный персональный отчёт — честно, точно, полезно.
+      </div>
+      <div class="report-teaser-items">
+        <div class="rti"><div class="rti-icon">◎</div>Твой уровень: Слабый / Средний / Хороший / Отличный</div>
+        <div class="rti"><div class="rti-icon">→</div>Прогноз баллов ЕНТ по математике</div>
+        <div class="rti"><div class="rti-icon">▲</div>Топ слабых тем с конкретным планом действий</div>
+        <div class="rti"><div class="rti-icon">≡</div>3-недельный план подготовки под тебя</div>
+        <div class="rti"><div class="rti-icon">✦</div>Личное сообщение от AI с рекомендациями</div>
+      </div>
+    </div>
+    <div class="report-mockup">
+      <div class="mockup-header">
+        <div class="mockup-avatar" style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6);font-family:monospace;">AI</div>
+        <div>
+          <div class="mockup-name">AI-анализ готов</div>
+          <div class="mockup-sub">ENT Math · Математика 2026</div>
+        </div>
+      </div>
+      <div class="mockup-score">
+        <div class="mockup-score-num">72%</div>
+        <div class="mockup-score-label">Хороший уровень · Прогноз: 18/25 баллов</div>
+      </div>
+      <div class="mockup-bars">
+        <div class="mockup-bar-row">
+          <div class="mockup-bar-name">Уравнения</div>
+          <div class="mockup-bar-wrap"><div class="mockup-bar-fill" style="width:100%;background:#4ade80"></div></div>
+          <div class="mockup-bar-pct">100%</div>
+        </div>
+        <div class="mockup-bar-row">
+          <div class="mockup-bar-name">Логарифмы</div>
+          <div class="mockup-bar-wrap"><div class="mockup-bar-fill" style="width:67%;background:#4ade80"></div></div>
+          <div class="mockup-bar-pct">67%</div>
+        </div>
+        <div class="mockup-bar-row">
+          <div class="mockup-bar-name">Тригонометрия</div>
+          <div class="mockup-bar-wrap"><div class="mockup-bar-fill" style="width:33%;background:#ef4444"></div></div>
+          <div class="mockup-bar-pct">33%</div>
+        </div>
+        <div class="mockup-bar-row">
+          <div class="mockup-bar-name">Геометрия</div>
+          <div class="mockup-bar-wrap"><div class="mockup-bar-fill" style="width:50%;background:#eab308"></div></div>
+          <div class="mockup-bar-pct">50%</div>
+        </div>
+      </div>
+      <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;gap:7px;">
+        <div class="mockup-plan-item"><div class="mockup-week">1</div>Тригонометрия — повтори формулы и реши 15 задач</div>
+        <div class="mockup-plan-item"><div class="mockup-week">2</div>Геометрия — теоремы Пифагора и площади фигур</div>
+        <div class="mockup-plan-item"><div class="mockup-week">3</div>Повторение + полный пробный тест</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOPICS SCROLL -->
+<section class="topics-scroll">
+  <h2 class="topics-scroll-title">Все 17 тем ЕНТ — с AI-вопросами</h2>
+  <div class="scroll-overflow">
+    <div class="scroll-track">
+      <span class="scroll-tag active">Уравнения</span>
+      <span class="scroll-tag">Неравенства</span>
+      <span class="scroll-tag">Логарифмы</span>
+      <span class="scroll-tag active">Тригонометрия</span>
+      <span class="scroll-tag">Производная</span>
+      <span class="scroll-tag">Функции</span>
+      <span class="scroll-tag active">Вероятность</span>
+      <span class="scroll-tag">Прогрессии</span>
+      <span class="scroll-tag">Векторы</span>
+      <span class="scroll-tag active">Стереометрия</span>
+      <span class="scroll-tag">Статистика</span>
+      <span class="scroll-tag">Комбинаторика</span>
+      <span class="scroll-tag active">Текстовые задачи</span>
+      <span class="scroll-tag">Степени и корни</span>
+      <span class="scroll-tag">Планиметрия</span>
+      <span class="scroll-tag active">Треугольники</span>
+      <span class="scroll-tag">Окружность</span>
+      <span class="scroll-tag active">Уравнения</span>
+      <span class="scroll-tag">Неравенства</span>
+      <span class="scroll-tag">Логарифмы</span>
+      <span class="scroll-tag active">Тригонометрия</span>
+      <span class="scroll-tag">Производная</span>
+      <span class="scroll-tag">Функции</span>
+      <span class="scroll-tag active">Вероятность</span>
+      <span class="scroll-tag">Прогрессии</span>
+      <span class="scroll-tag">Векторы</span>
+      <span class="scroll-tag active">Стереометрия</span>
+      <span class="scroll-tag">Статистика</span>
+      <span class="scroll-tag">Комбинаторика</span>
+      <span class="scroll-tag active">Текстовые задачи</span>
+      <span class="scroll-tag">Степени и корни</span>
+      <span class="scroll-tag">Планиметрия</span>
+      <span class="scroll-tag active">Треугольники</span>
+      <span class="scroll-tag">Окружность</span>
+    </div>
+  </div>
+</section>
+
+<!-- STEPS -->
+<section class="steps">
+  <div class="steps-inner">
+    <h2 class="steps-title">Три шага к высокому баллу</h2>
+    <div class="steps-list">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-title">Пройди AI-тренажёр</div>
+        <div class="step-desc">17 тем ЕНТ. Вопросы генерирует AI — каждый раз уникальные задачи реального уровня. Без воды, без теории — только практика.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-title">Получи AI-отчёт</div>
+        <div class="step-desc">После теста AI анализирует каждую тему. Видно что знаешь на 90%, а что на 20%. Прогноз баллов ЕНТ и личный план подготовки.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-title">Иди на ЕНТ уверенно</div>
+        <div class="step-desc">Знаешь где слабое место — и уже работаешь над ним. Вернись в тренажёр через неделю — вопросы будут новые, прогресс видно сразу.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-final">
+  <h2 class="cta-final-title">Узнай свой<br>реальный уровень</h2>
+  <p class="cta-final-sub">Бесплатно · Без регистрации · AI-вопросы + AI-отчёт</p>
+  <button class="btn btn-xl cta-final-btn" id="cta-start-btn">
+    Начать тренажёр ЕНТ <span class="arrow">→</span>
+  </button>
+</section>
+
+<script src="/js/api.js"></script>
+<script src="/js/landing.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="0;url=/diagnostic.html">
+<title>ENT Math</title>
+<script>window.location.replace('/diagnostic.html');</script>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/components.css">
+<style>
+.auth-wrap {
+  max-width: 440px; margin: 0 auto; padding: 60px 24px 80px;
+  text-align: center;
+}
+.auth-logo {
+  font-family: var(--display); font-size: 20px; font-weight: 800;
+  color: var(--text); margin-bottom: 40px; display: block; text-decoration: none;
+}
+.auth-logo span { border-bottom: 2.5px solid var(--text); }
+.auth-title {
+  font-family: var(--display); font-size: 28px; font-weight: 800;
+  letter-spacing: -.5px; margin-bottom: 10px; line-height: 1.15;
+}
+.auth-sub { font-size: 14px; color: var(--muted); margin-bottom: 32px; line-height: 1.6; }
+.auth-step { display: none; }
+.auth-step.active { display: block; animation: fadeUp .4s ease both; }
+.error-msg { color: var(--err); font-size: 13px; margin-top: 10px; min-height: 20px; }
+.resend-btn {
+  background: none; border: none; color: var(--muted); font-size: 13px;
+  cursor: pointer; text-decoration: underline; margin-top: 14px;
+}
+.resend-btn:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <a class="auth-logo" href="/">ENT<span>Math</span></a>
+
+  <!-- STEP 1: Email -->
+  <div class="auth-step active" id="step-email">
+    <h1 class="auth-title">Введи свой email</h1>
+    <p class="auth-sub">Пришлём код подтверждения. После входа будет доступен полный вариант ЕНТ 2026.</p>
+    <input class="input" type="email" id="email-input"
+      placeholder="example@mail.com" autocomplete="email">
+    <div class="error-msg" id="email-error"></div>
+    <button class="btn btn-dark btn-lg btn-full mt-16" onclick="sendCode()">
+      Получить код <span class="arrow">→</span>
+    </button>
+    <p style="font-size:12px;color:var(--muted);margin-top:16px;">
+      Нажимая кнопку, ты соглашаешься на обработку email
+    </p>
+  </div>
+
+  <!-- STEP 2: Code -->
+  <div class="auth-step" id="step-code">
+    <h1 class="auth-title">Введи код<br>из письма</h1>
+    <p class="auth-sub" id="code-sub">Отправили 6-значный код на <strong id="email-display"></strong></p>
+    <div class="code-inputs">
+      <input class="code-digit" type="tel" maxlength="1" data-idx="0">
+      <input class="code-digit" type="tel" maxlength="1" data-idx="1">
+      <input class="code-digit" type="tel" maxlength="1" data-idx="2">
+      <input class="code-digit" type="tel" maxlength="1" data-idx="3">
+      <input class="code-digit" type="tel" maxlength="1" data-idx="4">
+      <input class="code-digit" type="tel" maxlength="1" data-idx="5">
+    </div>
+    <div class="error-msg" id="code-error"></div>
+    <button class="btn btn-dark btn-lg btn-full" onclick="verifyCode()">
+      Войти <span class="arrow">→</span>
+    </button>
+    <button class="resend-btn" onclick="goBackToEmail()">← Изменить email</button>
+  </div>
+
+  <!-- STEP 3: Loading -->
+  <div class="auth-step" id="step-loading">
+    <div class="loading-screen" style="min-height:30vh;">
+      <div class="spinner"></div>
+      <div class="loading-label" id="auth-loading-text">Проверяю код...</div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/auth.js"></script>
+</body>
+</html>

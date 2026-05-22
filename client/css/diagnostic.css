@@ -1,0 +1,79 @@
+.diag-wrap {
+  max-width: 680px; margin: 0 auto; padding: 40px 24px 80px;
+}
+.diag-hero-tag {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--border2); border-radius: 100px;
+  padding: 5px 14px 5px 8px; margin-bottom: 16px;
+}
+.diag-hero-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text); }
+.diag-hero-text { font-size: 12px; color: var(--muted); font-weight: 500; }
+.diag-title {
+  font-family: var(--display); font-size: 28px; font-weight: 800;
+  letter-spacing: -.5px; margin-bottom: 8px; line-height: 1.15;
+}
+.diag-sub { font-size: 14px; color: var(--muted); margin-bottom: 28px; }
+
+/* Exam select */
+.exam-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.exam-card {
+  background: #fff; border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px; cursor: pointer; transition: all .2s;
+}
+.exam-card:hover { border-color: var(--text); transform: translateY(-2px); }
+.exam-card.selected { border-color: var(--text); background: var(--surface); }
+.exam-card-name {
+  font-family: var(--display); font-size: 26px; font-weight: 800;
+  color: var(--text); margin-bottom: 4px; letter-spacing: -.5px;
+}
+.exam-card-sub  { font-size: 12px; color: var(--muted); }
+.exam-card-tag  { font-size: 11px; color: var(--text); font-weight: 600; margin-top: 12px; letter-spacing: .05em; text-transform: uppercase; }
+
+/* Topics overview */
+.topics-section { margin-bottom: 28px; }
+.topics-section-label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px;
+}
+.topics-section-label + .tov-grid { margin-bottom: 16px; }
+.tov-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+
+/* Question screen */
+.q-section-label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+.q-text {
+  font-family: var(--display); font-size: 20px; font-weight: 700;
+  line-height: 1.45; margin-bottom: 28px; color: var(--text); letter-spacing: -.3px;
+}
+.options-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+
+/* Topic done */
+.topic-done-card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 20px;
+}
+.topic-done-label {
+  font-size: 11px; font-weight: 600; color: var(--muted);
+  letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px;
+}
+.topic-done-name  { font-family: var(--display); font-size: 22px; font-weight: 800; margin-bottom: 20px; }
+.topic-done-pct   { font-family: var(--display); font-size: 56px; font-weight: 800; letter-spacing: -2px; }
+.topic-done-descr { font-size: 14px; color: var(--muted); margin-top: 8px; }
+
+/* Results */
+.results-header { text-align: center; margin-bottom: 32px; }
+.results-title { font-family: var(--display); font-size: 22px; font-weight: 800; margin-bottom: 6px; }
+.results-sub   { font-size: 14px; color: var(--muted); }
+.results-list  { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
+
+/* Auth prompt */
+.auth-prompt {
+  background: var(--text); border-radius: var(--radius-lg);
+  padding: 28px; text-align: center; margin-bottom: 14px;
+}
+.auth-prompt h3 { font-family: var(--display); font-size: 18px; font-weight: 800; color: #fff; margin-bottom: 10px; }
+.auth-prompt p  { font-size: 14px; color: rgba(255,255,255,.5); line-height: 1.65; margin-bottom: 20px; }
+.auth-prompt .btn-xl { background: #fff; color: var(--text); }
+
+@media (max-width: 600px) {
+  .exam-grid { grid-template-columns: 1fr; }
+}

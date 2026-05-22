@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #fff;
+  --surface: #f9f9f7;
+  --surface2: #f2f2f0;
+  --border: #e5e5e0;
+  --border2: #ccc;
+  --text: #111;
+  --muted: #888;
+  --muted2: #555;
+  --ok: #1a7a3c;
+  --ok-bg: #e8f5ee;
+  --err: #b94040;
+  --err-bg: #fceaea;
+  --mid: #8a6800;
+  --mid-bg: #fff8e0;
+  --sans: 'Inter', sans-serif;
+  --display: 'Bricolage Grotesque', sans-serif;
+  --radius: 12px;
+  --radius-lg: 16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; }
+img { max-width: 100%; }
+a { color: inherit; }
+button { cursor: pointer; font-family: var(--sans); }
+
+/* Утилиты */
+.hidden { display: none !important; }
+.text-muted { color: var(--muted); }
+.text-center { text-align: center; }
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mt-32 { margin-top: 32px; }
+
+/* Анимации */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: .5; transform: scale(.85); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes scrollLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.anim-fadeUp   { animation: fadeUp .5s ease both; }
+.anim-fadeUp-2 { animation: fadeUp .5s ease .1s both; }
+.anim-fadeUp-3 { animation: fadeUp .5s ease .2s both; }
+
+/* Spinner */
+.spinner {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2.5px solid var(--border2);
+  border-top-color: var(--text);
+  animation: spin 1s linear infinite;
+}

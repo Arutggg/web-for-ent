@@ -236,6 +236,7 @@ td { padding: 12px 14px; font-size: 13px; vertical-align: middle; }
     <button class="tab-btn" data-tab="sessions">Сессии</button>
     <button class="tab-btn" data-tab="leads">Emails</button>
     <button class="tab-btn" data-tab="bank">Банк вопросов</button>
+    <button class="tab-btn" data-tab="feedback">Отзывы</button>
   </div>
 
   <!-- CONTENT -->
@@ -317,6 +318,15 @@ td { padding: 12px 14px; font-size: 13px; vertical-align: middle; }
       <div class="table-wrap" id="bank-table">
         <div class="loading">Загрузка...</div>
       </div>
+    </div>
+
+    <!-- FEEDBACK -->
+    <div class="tab-pane" id="tab-feedback">
+      <div class="section-hdr">
+        <div class="section-title">Отзывы пользователей</div>
+        <button class="btn-outline" id="feedback-refresh">Обновить</button>
+      </div>
+      <div id="feedback-list"><div class="loading">Загрузка...</div></div>
     </div>
 
   </div>
@@ -410,6 +420,10 @@ document.getElementById('leads-refresh').addEventListener('click', async () => {
   const data = await api('/api/admin/data');
   renderLeads(data.email_leads || []);
 });
+document.getElementById('feedback-refresh').addEventListener('click', async () => {
+  const data = await api('/api/feedback');
+  renderFeedback(data.feedback || []);
+});
 
 // ---- RENDER ALL ----
 async function renderAll(data) {
@@ -419,6 +433,46 @@ async function renderAll(data) {
   const bankData = await api('/api/admin/bank');
   renderBank(bankData);
   document.getElementById('s-bank').textContent = bankData.totalQuestions;
+  const fbData = await api('/api/feedback');
+  renderFeedback(fbData.feedback || []);
+}
+
+function renderFeedback(list) {
+  const el = document.getElementById('feedback-list');
+  if (!list.length) { el.innerHTML = '<div class="loading">Отзывов пока нет</div>'; return; }
+  const stars = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+  el.innerHTML = '';
+  list.forEach(f => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;flex-direction:column;gap:6px;padding:16px;border-bottom:1px solid var(--border);';
+
+    const meta = document.createElement('div');
+    meta.style.cssText = 'display:flex;align-items:center;gap:12px;';
+    if (f.rating) {
+      const s = document.createElement('span');
+      s.style.cssText = 'color:#facc15;font-size:14px;';
+      s.textContent = stars(f.rating);
+      meta.appendChild(s);
+    }
+    const date = document.createElement('span');
+    date.style.cssText = 'font-size:11px;color:var(--muted);';
+    date.textContent = new Date(f.created_at).toLocaleString('ru');
+    meta.appendChild(date);
+    if (f.email) {
+      const em = document.createElement('span');
+      em.style.cssText = 'font-size:11px;color:var(--blue);';
+      em.textContent = f.email;
+      meta.appendChild(em);
+    }
+
+    const text = document.createElement('div');
+    text.style.cssText = 'font-size:14px;color:var(--text);line-height:1.5;';
+    text.textContent = f.text;
+
+    row.appendChild(meta);
+    row.appendChild(text);
+    el.appendChild(row);
+  });
 }
 
 // ---- DASHBOARD ----

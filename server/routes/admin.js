@@ -26,8 +26,10 @@ const TOPICS = [
 ];
 
 function auth(req, res, next) {
-  const secret = req.headers['x-admin-secret'] || req.query.secret;
-  if (!secret || secret !== (process.env.ADMIN_SECRET || 'entmath2026')) {
+  const adminSecret = process.env.ADMIN_SECRET;
+  if (!adminSecret) return res.status(500).json({ error: 'ADMIN_SECRET не задан на сервере' });
+  const provided = req.headers['x-admin-secret'];
+  if (!provided || provided !== adminSecret) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
   next();

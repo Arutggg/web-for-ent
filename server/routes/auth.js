@@ -1,7 +1,9 @@
 const router = require('express').Router();
-const { emailLimiter } = require('../middleware/rateLimit');
+const { emailLimiter, codeVerifyLimiter } = require('../middleware/rateLimit');
 const db = require('../utils/db');
 const { sendCode } = require('../utils/mailer');
+
+const EMAIL_RE = /^[^\s@]{1,64}@[^\s@]{1,253}\.[^\s@]{2,}$/;
 
 function genCode() {
   return String(Math.floor(100000 + Math.random() * 900000));
@@ -10,7 +12,7 @@ function genCode() {
 // POST /api/auth/send-code
 router.post('/send-code', emailLimiter, async (req, res) => {
   const { email } = req.body;
-  if (!email || !email.includes('@')) {
+  if (!email || typeof email !== 'string' || !EMAIL_RE.test(email.trim()) || email.length > 320) {
     return res.status(400).json({ error: 'Некорректный email' });
   }
 
@@ -31,7 +33,7 @@ router.post('/send-code', emailLimiter, async (req, res) => {
 });
 
 // POST /api/auth/verify-code
-router.post('/verify-code', async (req, res) => {
+router.post('/verify-code', codeVerifyLimiter, async (req, res) => {
   const { email, code } = req.body;
   if (!email || !code) {
     return res.status(400).json({ error: 'Нужны email и код' });

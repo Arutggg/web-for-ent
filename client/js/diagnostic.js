@@ -234,6 +234,7 @@ async function startDiagnostic() {
     const data   = await API.diagnostic.getTopics(state.exam);
     stopLoadingTips();
     state.topics = data.topics;
+    applyWeakTopicsMode();
     renderTopicsOverview();
     showScreen('screen-topics');
 
@@ -1060,8 +1061,8 @@ function renderReport(report, totalPct, topics) {
   const examTag = document.getElementById('rpt-exam-tag');
   if (examTag) examTag.textContent = (state.exam === 'ege' ? 'ЕГЭ' : 'ЕНТ') + ' · Математика';
 
-  // Diagnosis
-  document.getElementById('rpt-diagnosis-text').textContent = report.diagnosis || report.level || '—';
+  // Diagnosis — always generate from actual results, AI diagnosis is too generic
+  document.getElementById('rpt-diagnosis-text').textContent = buildDiagnosisText(topics, totalPct);
 
   // Shared counts used in hero mini-stats + stats strip
   const pred      = report.predictedScore || Math.round(totalPct / 100 * 50);
@@ -1178,6 +1179,13 @@ function renderReport(report, totalPct, topics) {
   // Final
   document.getElementById('rpt-final-text').textContent =
     report.finalMotivation || 'Знай где слабое место — бей туда. Ты можешь.';
+
+  // Show weak practice button if there are weak topics
+  const weakBtn = document.getElementById('btn-practice-weak');
+  if (weakBtn) {
+    const hasWeak = topics.some(t => t.pct < 60);
+    weakBtn.style.display = hasWeak ? 'inline-flex' : 'none';
+  }
 }
 
 let _lastReport = null;
@@ -1284,4 +1292,115 @@ function renderReportFallback(totalPct, topics) {
     finalMotivation: 'Знай где слабое место — бей туда каждый день. Результат придёт.',
   };
   renderReport_wrap(fallbackReport, totalPct, topics);
+}
+
+// ---- SMART DIAGNOSIS TEXT ----
+function buildDiagnosisText(topics, totalPct) {
+  const sectionMap = {};
+  topics.forEach(t => {
+    if (!sectionMap[t.section]) sectionMap[t.section] = [];
+    sectionMap[t.section].push(t);
+  });
+  const sectionAvgs = Object.entries(sectionMap).map(([name, ts]) => ({
+    name,
+    avg: Math.round(ts.reduce((s, t) => s + t.pct, 0) / ts.length),
+  })).sort((a, b) => a.avg - b.avg);
+
+  const weak   = [...topics].sort((a, b) => a.pct - b.pct).filter(t => t.pct < 40);
+  const strong = [...topics].sort((a, b) => b.pct - a.pct).filter(t => t.pct >= 70);
+  const worst  = sectionAvgs[0];
+  const best   = sectionAvgs[sectionAvgs.length - 1];
+
+  if (totalPct >= 75) {
+    if (weak.length === 0) return 'Отличная подготовка — все темы на высоком уровне. Держи темп и не снижай интенсивность перед ЕНТ.';
+    return `Сильный уровень, ${strong.length} тем закрыты уверенно. Единственное что тянет вниз: ${weak.slice(0, 2).map(t => t.name).join(' и ')} — туда и вложи оставшееся время.`;
+  }
+  if (totalPct >= 55) {
+    return `${best.name} даётся лучше всего (${best.avg}%), а ${worst.name} — явная слабость (${worst.avg}%). Именно там и нужно бить в первую очередь.`;
+  }
+  if (totalPct >= 35) {
+    const top2 = weak.slice(0, 2).map(t => t.name).join(' и ');
+    return `Пробелы есть по многим темам. Самые критичные: ${top2 || worst.name} — там почти ноль. Начни с них, остальное подтянется.`;
+  }
+  return `Большинство тем ещё не закрыты — это точка роста, не приговор. ${worst.name} (${worst.avg}%) — самый слабый раздел. Начни именно с него, это основа ЕНТ.`;
+}
+
+// ---- WEAK TOPICS PRACTICE ----
+function practiceWeakTopics() {
+  const weakIds = Object.entries(state.allResults)
+    .filter(([, r]) => r.pct < 60)
+    .map(([id]) => id);
+  if (!weakIds.length) { alert('Нет слабых тем — всё отлично!'); return; }
+  sessionStorage.setItem('weakTopicsMode', JSON.stringify({ exam: state.exam, weakIds }));
+  resetAll();
+  // Авто-выбор типа экзамена и запуск
+  setTimeout(() => {
+    selectExam(state.exam || 'ent');
+    document.getElementById('btn-continue')?.click();
+  }, 50);
+}
+
+// Вызывается в startDiagnostic после загрузки тем
+function applyWeakTopicsMode() {
+  const raw = sessionStorage.getItem('weakTopicsMode');
+  if (!raw) return false;
+  sessionStorage.removeItem('weakTopicsMode');
+  let parsed;
+  try { parsed = JSON.parse(raw); } catch { return false; }
+  const { weakIds } = parsed;
+  if (!weakIds || !weakIds.length) return false;
+  state.topics = state.topics.filter(t => weakIds.includes(t.id));
+  if (!state.topics.length) return false;
+  document.getElementById('weak-mode-banner')?.classList.add('show');
+  const title = document.getElementById('topics-screen-title');
+  const sub   = document.getElementById('topics-screen-sub');
+  if (title) title.textContent = 'Слабые темы';
+  if (sub)   sub.textContent   = `${state.topics.length} ${state.topics.length === 1 ? 'тема' : 'темы'} — там где были ошибки`;
+  return true;
+}
+
+// ---- FEEDBACK WIDGET ----
+let _fbRating = 0;
+
+function openFeedback() {
+  document.getElementById('fb-overlay').classList.add('open');
+  document.getElementById('fb-modal').classList.add('open');
+}
+function closeFeedback() {
+  document.getElementById('fb-overlay').classList.remove('open');
+  document.getElementById('fb-modal').classList.remove('open');
+}
+function setRating(v) {
+  _fbRating = v;
+  document.querySelectorAll('.fb-star').forEach(s => {
+    s.classList.toggle('active', Number(s.dataset.v) <= v);
+  });
+}
+async function submitFeedback() {
+  const text   = document.getElementById('fb-text').value.trim();
+  const email  = document.getElementById('fb-email').value.trim();
+  const status = document.getElementById('fb-status');
+  const btn    = document.getElementById('fb-submit');
+  if (!text) { status.textContent = 'Напиши хотя бы пару слов'; status.className = 'fb-status err'; return; }
+  btn.disabled = true; btn.textContent = 'Отправляем...';
+  status.textContent = ''; status.className = 'fb-status';
+  try {
+    const r = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating: _fbRating, text, email }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Ошибка');
+    status.textContent = 'Спасибо! Твоё мнение очень важно.'; status.className = 'fb-status ok';
+    document.getElementById('fb-text').value = '';
+    document.getElementById('fb-email').value = '';
+    _fbRating = 0;
+    document.querySelectorAll('.fb-star').forEach(s => s.classList.remove('active'));
+    setTimeout(closeFeedback, 2000);
+  } catch (e) {
+    status.textContent = e.message; status.className = 'fb-status err';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Отправить';
+  }
 }

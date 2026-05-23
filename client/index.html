@@ -122,6 +122,60 @@
 @media (max-width: 700px) {
   .report-teaser { margin: 0 16px 48px; }
 }
+.fb-btn {
+  position: fixed; bottom: 24px; right: 24px; z-index: 900;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(8px); cursor: pointer;
+  font-size: 20px; display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .2s;
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+}
+.fb-btn:hover { background: rgba(255,255,255,.16); transform: scale(1.08); }
+.fb-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  backdrop-filter: blur(3px); z-index: 950;
+}
+.fb-overlay.open { display: block; }
+.fb-modal {
+  display: none; position: fixed; bottom: 84px; right: 24px;
+  width: 320px; background: #1a1a1a; border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px; padding: 24px; z-index: 960;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  animation: fbSlideUp .22s ease;
+}
+.fb-modal.open { display: block; }
+@keyframes fbSlideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+.fb-modal-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.fb-modal-sub { font-size: 12px; color: rgba(255,255,255,.4); margin-bottom: 16px; }
+.fb-stars { display: flex; gap: 6px; margin-bottom: 14px; }
+.fb-star { font-size: 24px; cursor: pointer; color: rgba(255,255,255,.2); transition: color .15s; }
+.fb-star.active { color: #facc15; }
+.fb-textarea {
+  width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 13px;
+  font-family: inherit; resize: none; outline: none; margin-bottom: 10px;
+}
+.fb-textarea:focus, .fb-email:focus { border-color: rgba(255,255,255,.3); }
+.fb-email {
+  width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 13px;
+  font-family: inherit; outline: none; margin-bottom: 14px;
+}
+.fb-email::placeholder, .fb-textarea::placeholder { color: rgba(255,255,255,.25); }
+.fb-submit {
+  width: 100%; background: #fff; color: #111; border: none;
+  border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.fb-submit:hover { opacity: .85; }
+.fb-submit:disabled { opacity: .4; cursor: default; }
+.fb-status { font-size: 12px; margin-top: 10px; min-height: 18px; text-align: center; }
+.fb-status.ok  { color: #4ade80; }
+.fb-status.err { color: #f87171; }
+@media (max-width: 640px) {
+  .fb-modal { right: 12px; left: 12px; width: auto; bottom: 80px; }
+  .fb-btn   { bottom: 20px; right: 16px; }
+}
 </style>
 </head>
 <body>
@@ -360,7 +414,73 @@
   </button>
 </section>
 
+<!-- Feedback button -->
+<button class="fb-btn" onclick="openFeedback()" title="Обратная связь">💬</button>
+<div class="fb-overlay" id="fb-overlay" onclick="closeFeedback()"></div>
+<div class="fb-modal" id="fb-modal">
+  <div class="fb-modal-head">
+    <div class="fb-modal-title">Обратная связь</div>
+    <div class="fb-modal-sub">Что понравилось? Что убрать? Что добавить?</div>
+  </div>
+  <div class="fb-stars" id="fb-stars">
+    <span class="fb-star" data-v="1" onclick="setRating(1)">★</span>
+    <span class="fb-star" data-v="2" onclick="setRating(2)">★</span>
+    <span class="fb-star" data-v="3" onclick="setRating(3)">★</span>
+    <span class="fb-star" data-v="4" onclick="setRating(4)">★</span>
+    <span class="fb-star" data-v="5" onclick="setRating(5)">★</span>
+  </div>
+  <textarea class="fb-textarea" id="fb-text" placeholder="Напиши свои мысли..." rows="4"></textarea>
+  <input class="fb-email" id="fb-email" type="email" placeholder="Email (необязательно)">
+  <button class="fb-submit" id="fb-submit" onclick="submitFeedback()">Отправить</button>
+  <div class="fb-status" id="fb-status"></div>
+</div>
+
 <script src="/js/api.js"></script>
 <script src="/js/landing.js"></script>
+<script>
+let _fbRating = 0;
+function openFeedback() {
+  document.getElementById('fb-overlay').classList.add('open');
+  document.getElementById('fb-modal').classList.add('open');
+}
+function closeFeedback() {
+  document.getElementById('fb-overlay').classList.remove('open');
+  document.getElementById('fb-modal').classList.remove('open');
+}
+function setRating(v) {
+  _fbRating = v;
+  document.querySelectorAll('.fb-star').forEach(s => {
+    s.classList.toggle('active', Number(s.dataset.v) <= v);
+  });
+}
+async function submitFeedback() {
+  const text   = document.getElementById('fb-text').value.trim();
+  const email  = document.getElementById('fb-email').value.trim();
+  const status = document.getElementById('fb-status');
+  const btn    = document.getElementById('fb-submit');
+  if (!text) { status.textContent = 'Напиши хотя бы пару слов'; status.className = 'fb-status err'; return; }
+  btn.disabled = true; btn.textContent = 'Отправляем...';
+  status.textContent = ''; status.className = 'fb-status';
+  try {
+    const r = await fetch('/api/feedback', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating: _fbRating, text, email }),
+    });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Ошибка');
+    status.textContent = 'Спасибо! Твоё мнение очень важно.'; status.className = 'fb-status ok';
+    document.getElementById('fb-text').value = '';
+    document.getElementById('fb-email').value = '';
+    _fbRating = 0;
+    document.querySelectorAll('.fb-star').forEach(s => s.classList.remove('active'));
+    setTimeout(closeFeedback, 2000);
+  } catch(e) {
+    status.textContent = e.message; status.className = 'fb-status err';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Отправить';
+  }
+}
+</script>
 </body>
 </html>

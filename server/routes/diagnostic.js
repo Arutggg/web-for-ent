@@ -3,8 +3,9 @@ const path    = require('path');
 const fs      = require('fs');
 const { pickQuestions, shuffleOptions } = require('../utils/shuffle');
 const db = require('../utils/db');
-const { replenishTopic } = require('../utils/generateQuestion');
+const { replenishTopic, TOPIC_FILES } = require('../utils/generateQuestion');
 const { sendReport } = require('../utils/mailer');
+const { replenishLimiter } = require('../middleware/rateLimit');
 
 const questionsDir = path.join(__dirname, '../../data/questions');
 
@@ -95,9 +96,10 @@ router.post('/questions', (req, res) => {
 });
 
 // Фоновое пополнение банка — отвечает сразу, генерирует асинхронно
-router.post('/replenish', (req, res) => {
+router.post('/replenish', replenishLimiter, (req, res) => {
   const { topicId } = req.body;
-  if (!topicId) return res.status(400).json({ error: 'topicId обязателен' });
+  if (!topicId || typeof topicId !== 'string') return res.status(400).json({ error: 'topicId обязателен' });
+  if (!TOPIC_FILES[topicId]) return res.status(400).json({ error: 'Неизвестная тема' });
 
   if (replenishing.has(topicId)) {
     return res.json({ ok: true, message: 'Пополнение уже идёт' });
@@ -119,7 +121,13 @@ router.post('/replenish', (req, res) => {
 });
 
 router.post('/save', (req, res) => {
-  db.saveDiagnosticResult(req.body);
+  const { sessionId, examType, totalPct, topicData } = req.body;
+  if (!sessionId || !examType || totalPct === undefined || !topicData) {
+    return res.status(400).json({ error: 'Неполные данные' });
+  }
+  if (!['ent', 'ege'].includes(examType)) return res.status(400).json({ error: 'Некорректный examType' });
+  if (typeof totalPct !== 'number' || totalPct < 0 || totalPct > 100) return res.status(400).json({ error: 'Некорректный totalPct' });
+  db.saveDiagnosticResult({ sessionId, examType, totalPct, topicData });
   res.json({ ok: true });
 });
 

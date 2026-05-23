@@ -524,16 +524,16 @@ body { background: #fafaf8; }
 
 /* ── DIAGNOSIS ── */
 .rpt-diagnosis {
-  background: #111; border-radius: 16px; padding: 20px 28px;
-  margin-bottom: 10px; display: flex; align-items: center; gap: 20px;
+  background: #111; border-radius: 16px; padding: 22px 28px;
+  margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px;
 }
 .rpt-diagnosis-label {
-  font-size: 9px; font-weight: 800; color: rgba(255,255,255,.2);
-  letter-spacing: .2em; text-transform: uppercase; white-space: nowrap; flex-shrink: 0;
+  font-size: 9px; font-weight: 800; color: rgba(255,255,255,.3);
+  letter-spacing: .2em; text-transform: uppercase;
 }
 .rpt-diagnosis-text {
-  font-family: var(--display); font-size: 18px; font-weight: 800;
-  color: #fff; letter-spacing: -.3px; line-height: 1.25;
+  font-size: 15px; font-weight: 500; line-height: 1.6;
+  color: rgba(255,255,255,.85); letter-spacing: -.1px;
 }
 
 /* ── STATS STRIP ── */
@@ -767,6 +767,104 @@ body { background: #fafaf8; }
   .rpt-loading-grid { grid-template-columns: 1fr; padding: 0 24px; gap: 36px; }
   .rpt-load-right { display: none; }
 }
+
+/* ---- Report feedback CTA ---- */
+.rpt-feedback-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  border: 1px solid rgba(255,255,255,.12); border-radius: 18px;
+  padding: 22px 28px; margin-bottom: 12px; flex-wrap: wrap;
+}
+.rpt-fb-cta-left { display: flex; align-items: center; gap: 16px; flex: 1; min-width: 200px; }
+.rpt-fb-cta-emoji { font-size: 28px; flex-shrink: 0; }
+.rpt-fb-cta-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.rpt-fb-cta-sub   { font-size: 12px; color: rgba(255,255,255,.45); line-height: 1.5; }
+.rpt-fb-cta-btn {
+  background: #fff; color: #111; border: none; border-radius: 12px;
+  padding: 11px 22px; font-size: 13px; font-weight: 700; cursor: pointer;
+  white-space: nowrap; transition: opacity .15s, transform .1s; flex-shrink: 0;
+}
+.rpt-fb-cta-btn:hover { opacity: .88; transform: translateY(-1px); }
+@media (max-width: 600px) {
+  .rpt-feedback-cta { flex-direction: column; align-items: flex-start; }
+  .rpt-fb-cta-btn   { width: 100%; text-align: center; }
+}
+
+/* ---- Weak-topics banner ---- */
+.weak-mode-banner {
+  display: none;
+  background: rgba(234,179,8,.12); border: 1px solid rgba(234,179,8,.3);
+  border-radius: 10px; padding: 10px 16px; margin-bottom: 16px;
+  font-size: 13px; font-weight: 600; color: rgba(234,179,8,.9);
+  text-align: center;
+}
+.weak-mode-banner.show { display: block; }
+
+/* ---- Feedback button ---- */
+.fb-btn {
+  position: fixed; bottom: 24px; right: 24px; z-index: 900;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.15);
+  backdrop-filter: blur(8px); cursor: pointer;
+  font-size: 20px; display: flex; align-items: center; justify-content: center;
+  transition: background .2s, transform .2s;
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+}
+.fb-btn:hover { background: rgba(255,255,255,.18); transform: scale(1.08); }
+
+/* ---- Feedback modal ---- */
+.fb-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,.55);
+  backdrop-filter: blur(3px); z-index: 950;
+}
+.fb-overlay.open { display: block; }
+.fb-modal {
+  display: none; position: fixed; bottom: 84px; right: 24px;
+  width: 320px; background: #1a1a1a; border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px; padding: 24px; z-index: 960;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  animation: fbSlideUp .22s ease;
+}
+.fb-modal.open { display: block; }
+@keyframes fbSlideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
+.fb-modal-head { margin-bottom: 16px; }
+.fb-modal-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+.fb-modal-sub { font-size: 12px; color: rgba(255,255,255,.4); }
+.fb-stars { display: flex; gap: 6px; margin-bottom: 14px; }
+.fb-star {
+  font-size: 24px; cursor: pointer; color: rgba(255,255,255,.2);
+  transition: color .15s, transform .1s;
+}
+.fb-star:hover, .fb-star.active { color: #facc15; }
+.fb-star:active { transform: scale(1.2); }
+.fb-textarea {
+  width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px; padding: 10px 12px; color: #fff; font-size: 13px;
+  font-family: inherit; resize: none; outline: none; margin-bottom: 10px;
+  transition: border-color .15s;
+}
+.fb-textarea:focus { border-color: rgba(255,255,255,.3); }
+.fb-email {
+  width: 100%; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 10px; padding: 9px 12px; color: #fff; font-size: 13px;
+  font-family: inherit; outline: none; margin-bottom: 14px; transition: border-color .15s;
+}
+.fb-email:focus { border-color: rgba(255,255,255,.3); }
+.fb-email::placeholder, .fb-textarea::placeholder { color: rgba(255,255,255,.25); }
+.fb-submit {
+  width: 100%; background: #fff; color: #111; border: none;
+  border-radius: 10px; padding: 10px; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: opacity .15s;
+}
+.fb-submit:hover { opacity: .85; }
+.fb-submit:disabled { opacity: .4; cursor: default; }
+.fb-status { font-size: 12px; margin-top: 10px; min-height: 18px; text-align: center; }
+.fb-status.ok  { color: #4ade80; }
+.fb-status.err { color: #f87171; }
+@media (max-width: 640px) {
+  .fb-modal { right: 12px; left: 12px; width: auto; bottom: 80px; }
+  .fb-btn   { bottom: 20px; right: 16px; }
+}
 </style>
 </head>
 <body>
@@ -845,8 +943,9 @@ body { background: #fafaf8; }
   <div class="diag-layout">
     <div class="diag-main">
       <div class="diag-tag"><span class="diag-tag-dot"></span><span id="topics-exam-label">ЕНТ · 17 тем</span></div>
-      <h2 class="diag-h1">Темы диагностики</h2>
-      <p class="diag-sub">По каждой теме — 2–3 вопроса реального уровня сложности</p>
+      <div class="weak-mode-banner" id="weak-mode-banner">⚡ Режим слабых тем — тренируемся только там, где ошиблись</div>
+      <h2 class="diag-h1" id="topics-screen-title">Темы диагностики</h2>
+      <p class="diag-sub" id="topics-screen-sub">По каждой теме — 2–3 вопроса реального уровня сложности</p>
       <div id="topics-container" style="margin-bottom:28px;"></div>
       <button class="btn btn-dark btn-lg btn-full" onclick="beginTest()">
         Начать тест <span class="arrow">→</span>
@@ -1158,6 +1257,7 @@ body { background: #fafaf8; }
 
     <!-- Diagnosis -->
     <div class="rpt-diagnosis">
+      <div class="rpt-diagnosis-label">AI наблюдение</div>
       <div class="rpt-diagnosis-text" id="rpt-diagnosis-text">—</div>
     </div>
 
@@ -1207,6 +1307,18 @@ body { background: #fafaf8; }
       <div class="rpt-plan-grid" id="rpt-plan-grid"></div>
     </div>
 
+      <!-- Feedback CTA -->
+      <div class="rpt-feedback-cta">
+        <div class="rpt-fb-cta-left">
+          <div class="rpt-fb-cta-emoji">💬</div>
+          <div>
+            <div class="rpt-fb-cta-title">Помоги сделать ENT Math лучше</div>
+            <div class="rpt-fb-cta-sub">Напиши что понравилось, что убрать и что добавить — это реально влияет на продукт</div>
+          </div>
+        </div>
+        <button class="rpt-fb-cta-btn" onclick="openFeedback()">Написать отзыв →</button>
+      </div>
+
       <!-- Final -->
       <div class="rpt-final">
         <div class="rpt-final-rule">ENT Math · AI</div>
@@ -1215,12 +1327,36 @@ body { background: #fafaf8; }
       </div>
 
       <!-- Actions -->
-      <div class="rpt-actions" style="margin-top:20px;">
+      <div class="rpt-actions" style="margin-top:20px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center;">
+        <button class="btn btn-dark btn-lg" id="btn-practice-weak" style="display:none;" onclick="practiceWeakTopics()">Потренироваться по слабым темам →</button>
         <button class="btn btn-outline btn-lg" onclick="resetAll()">← Пройти ещё раз</button>
       </div>
 
     </div>
   </div>
+</div>
+
+<!-- Feedback floating button -->
+<button class="fb-btn" id="fb-btn" onclick="openFeedback()" title="Обратная связь">💬</button>
+
+<!-- Feedback modal -->
+<div class="fb-overlay" id="fb-overlay" onclick="closeFeedback()"></div>
+<div class="fb-modal" id="fb-modal">
+  <div class="fb-modal-head">
+    <div class="fb-modal-title">Обратная связь</div>
+    <div class="fb-modal-sub">Что понравилось? Что убрать? Что добавить?</div>
+  </div>
+  <div class="fb-stars" id="fb-stars">
+    <span class="fb-star" data-v="1" onclick="setRating(1)">★</span>
+    <span class="fb-star" data-v="2" onclick="setRating(2)">★</span>
+    <span class="fb-star" data-v="3" onclick="setRating(3)">★</span>
+    <span class="fb-star" data-v="4" onclick="setRating(4)">★</span>
+    <span class="fb-star" data-v="5" onclick="setRating(5)">★</span>
+  </div>
+  <textarea class="fb-textarea" id="fb-text" placeholder="Напиши свои мысли..." rows="4"></textarea>
+  <input class="fb-email" id="fb-email" type="email" placeholder="Email (необязательно)">
+  <button class="fb-submit" id="fb-submit" onclick="submitFeedback()">Отправить</button>
+  <div class="fb-status" id="fb-status"></div>
 </div>
 
 <script src="/js/api.js"></script>

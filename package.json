@@ -17,5 +17,8 @@
     "helmet": "^8.2.0",
     "lowdb": "^7.0.1",
     "nodemailer": "^6.9.11"
+  },
+  "engines": {
+    "node": ">=18"
   }
 }

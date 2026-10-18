@@ -16,8 +16,9 @@ app.use(helmet({
 }));
 
 // CORS — в продакшне принимаем только свой домен
+// RENDER_EXTERNAL_URL Render подставляет сам — адрес сервиса вида https://entmath.onrender.com
 const allowedOrigins = isProd
-  ? [process.env.ALLOWED_ORIGIN || 'https://yourdomain.com']
+  ? [process.env.ALLOWED_ORIGIN, process.env.RENDER_EXTERNAL_URL].filter(Boolean)
   : true;
 app.use(cors({ origin: allowedOrigins }));
 

@@ -1,0 +1,30 @@
+# Render Blueprint: бесплатный веб-сервис с Node.js-бэкендом.
+# Render → New → Blueprint → выбрать этот репозиторий → Apply.
+services:
+  - type: web
+    name: entmath
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: ADMIN_SECRET
+        generateValue: true
+      # Необязательно: без ключа диагностика работает на банке вопросов,
+      # а отчёт строится локально без AI-анализа.
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # Необязательно: почта для кодов входа и отчётов.
+      - key: MAIL_HOST
+        sync: false
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASS
+        sync: false
+      - key: MAIL_FROM
+        sync: false

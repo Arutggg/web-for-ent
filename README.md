@@ -66,3 +66,6 @@ npm run dev
 ## Email в dev-режиме
 
 В режиме разработки код подтверждения возвращается прямо в ответе API — проверяй консоль браузера.
+
+
+Автор: Арутюн Газарян · [Telegram](https://t.me/aruuuttt05) · [GitHub](https://github.com/Arutggg)
